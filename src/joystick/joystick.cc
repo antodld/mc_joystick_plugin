@@ -44,6 +44,30 @@ Joystick::Joystick(std::string devicePath, bool blocking)
   openPath(devicePath, blocking);
 }
 
+void Joystick::reset()
+{
+  reset("/dev/input/js0");
+}
+
+void Joystick::reset(int joystickNumber)
+{
+  
+  std::stringstream sstm;
+  sstm << "/dev/input/js" << joystickNumber;
+  reset(sstm.str());
+}
+
+void Joystick::reset(std::string devicePath)
+{
+  reset(devicePath,false);
+}
+
+void Joystick::reset(std::string devicePath, bool blocking)
+{
+  close(_fd);
+  openPath(devicePath, blocking);
+}
+
 void Joystick::openPath(std::string devicePath, bool blocking)
 {
   // Open the device using either blocking or non-blocking

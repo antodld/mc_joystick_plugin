@@ -149,6 +149,16 @@ public:
    * from the joystick. Returns true if data is available, otherwise false.
    */
   bool sample(JoystickEvent * event);
+
+  void reset();
+
+  void reset(int joystickNumber);
+
+  void reset(std::string devicePath);
+
+  void reset(std::string devicePath, bool blocking);
+
+
 };
 
 #endif
