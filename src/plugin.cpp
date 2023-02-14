@@ -166,6 +166,11 @@ void mc_joystick_plugin::before(mc_control::MCGlobalController & controller)
       }
     }
   }
+
+  else
+  {
+    joystick_.reset();
+  }
 }
 
 void mc_joystick_plugin::after(mc_control::MCGlobalController & controller)
