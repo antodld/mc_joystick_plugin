@@ -4,5 +4,5 @@ Enabled: Posture
 
 IncludeHalfSitController: false
 ClearGlobalPluginiPath: true
-Plugins: [ JoystickPlugin ]
-GlobalPluginPaths: ["$<TARGET_FILE_DIR:JoystickPlugin>"]
+Plugins: [ mc_joystick_plugin ]
+GlobalPluginPaths: ["$<TARGET_FILE_DIR:mc_joystick_plugin>"]

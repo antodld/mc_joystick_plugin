@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-set(PROJECT_NAME JoystickPlugin)
+set(PROJECT_NAME mc_joystick_plugin)
 set(PROJECT_DESCRIPTION "")
 set(PROJECT_URL "")
 set(PROJECT_VERSION 0.0.1)
