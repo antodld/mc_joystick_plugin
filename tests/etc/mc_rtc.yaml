@@ -3,6 +3,6 @@ MainRobot: JVRC1
 Enabled: Posture
 
 IncludeHalfSitController: false
-ClearGlobalPluginiPath: true
+ClearGlobalPluginPath: true
 Plugins: [ mc_joystick_plugin ]
 GlobalPluginPaths: ["$<TARGET_FILE_DIR:mc_joystick_plugin>"]
