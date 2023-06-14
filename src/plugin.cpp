@@ -1,5 +1,5 @@
 #include "plugin.h"
-
+#include <mc_rtc/log/FlatLog.h>
 #include <mc_control/GlobalPluginMacros.h>
 
 namespace mc_plugin
@@ -63,6 +63,19 @@ void mc_joystick_plugin::init(mc_control::MCGlobalController & controller, const
           "LB", [this]() -> bool { return get_inputs(joystickButtonInputs::LB) == 1; }, [this]() {}),
       mc_rtc::gui::Checkbox(
           "RB", [this]() -> bool { return get_inputs(joystickButtonInputs::RB) == 1; }, [this]() {}));
+  
+  auto & logger = controller.controller().logger();
+  logger.addLogEntries(this,
+    "joystick_plugin_button_sate",
+    [this]() -> Eigen::VectorXd {return joystick_button_state_;},
+    "joystick_plugin_button_event",
+    [this]() -> Eigen::VectorXd {return joystick_button_event_;},
+    "joystick_plugin_analogical_state_0",
+    [this]() -> Eigen::VectorXd {return joystick_analogical_state_.col(0);},
+    "joystick_plugin_analogical_state_1",
+    [this]() -> Eigen::VectorXd {return joystick_analogical_state_.col(1);}
+    );
+
 }
 
 double mc_joystick_plugin::get_inputs(joystickButtonInputs in)
@@ -93,9 +106,20 @@ void mc_joystick_plugin::before(mc_control::MCGlobalController & controller)
   joystickConnected_ = joystick_.isFound();
   joystick_button_event_.setZero();
   controller.controller().datastore().assign<bool>("Joystick::connected", joystickConnected_);
-  if(joystickConnected_)
+  if(controller.controller().datastore().has("Replay::Log"))
   {
-
+    const auto log = controller.controller().datastore().get< std::shared_ptr<mc_rtc::log::FlatLog> >("Replay::Log");
+    if(log->has("joystick_plugin_button_sate"))
+    {
+      joystick_button_state_ = log->get< Eigen::VectorXd >("joystick_plugin_button_sate")[t_indx];
+      joystick_button_event_ = log->get< Eigen::VectorXd >("joystick_plugin_button_event")[t_indx];
+      joystick_analogical_state_.col(0) = log->get< Eigen::VectorXd >("joystick_plugin_analogical_state_0")[t_indx];
+      joystick_analogical_state_.col(1) = log->get< Eigen::VectorXd >("joystick_plugin_analogical_state_1")[t_indx];
+    }
+    t_indx +=1;
+  }
+  else if(joystickConnected_)
+  {
     if(joystick_.sample(&event_))
     {
 
