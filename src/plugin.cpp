@@ -40,6 +40,8 @@ void mc_joystick_plugin::init(mc_control::MCGlobalController & controller, const
 
   controller.controller().gui()->addElement(
       {"JoystickPlugin", "State"},
+      mc_rtc::gui::Button(
+          "Reset", [this,&controller]() { reset(controller); }),
       mc_rtc::gui::Checkbox(
           "A", [this]() -> bool { return get_inputs(joystickButtonInputs::A) == 1; }, [this]() {}),
       mc_rtc::gui::Checkbox(
@@ -99,6 +101,8 @@ Eigen::Vector2d mc_joystick_plugin::get_stick_value(joystickAnalogicInputs in)
 void mc_joystick_plugin::reset(mc_control::MCGlobalController & controller)
 {
   mc_rtc::log::info("mc_joystick_plugin::reset called");
+  joystickConnected_ = false;
+  joystick_.reset();
 }
 
 void mc_joystick_plugin::before(mc_control::MCGlobalController & controller)

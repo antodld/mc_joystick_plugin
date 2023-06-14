@@ -65,6 +65,8 @@ void Joystick::reset(std::string devicePath)
 void Joystick::reset(std::string devicePath, bool blocking)
 {
   close(_fd);
+  _fd = -1;
+  // std::cout << "opening" << std::endl;
   openPath(devicePath, blocking);
 }
 
