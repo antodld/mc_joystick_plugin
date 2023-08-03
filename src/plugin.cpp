@@ -107,10 +107,13 @@ void mc_joystick_plugin::before(mc_control::MCGlobalController & controller)
     const auto log = controller.controller().datastore().get<std::shared_ptr<mc_rtc::log::FlatLog>>("Replay::Log");
     if(log->has("joystick_plugin_button_sate"))
     {
-      joystick_button_state_ = log->get<Eigen::VectorXd>("joystick_plugin_button_sate")[t_indx];
-      joystick_button_event_ = log->get<Eigen::VectorXd>("joystick_plugin_button_event")[t_indx];
-      joystick_analogical_state_.col(0) = log->get<Eigen::VectorXd>("joystick_plugin_analogical_state_0")[t_indx];
-      joystick_analogical_state_.col(1) = log->get<Eigen::VectorXd>("joystick_plugin_analogical_state_1")[t_indx];
+      joystick_button_state_ = log->get<Eigen::VectorXd>("joystick_plugin_button_sate", t_indx, joystick_button_state_);
+      joystick_button_event_ =
+          log->get<Eigen::VectorXd>("joystick_plugin_button_event", t_indx, joystick_button_event_);
+      joystick_analogical_state_.col(0) =
+          log->get<Eigen::VectorXd>("joystick_plugin_analogical_state_0", t_indx, Eigen::VectorXd::Zero(0));
+      joystick_analogical_state_.col(1) =
+          log->get<Eigen::VectorXd>("joystick_plugin_analogical_state_1", t_indx, Eigen::VectorXd::Zero(0));
     }
     t_indx += 1;
   }
