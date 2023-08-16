@@ -46,7 +46,7 @@ private:
   double leftTrigger_range_ = 1;
   double rightTrigger_range_ = 1;
 
-  int t_indx = 0; //elapsed iteration;  
+  size_t t_indx = 0; // elapsed iteration;
 };
 
 } // namespace mc_plugin
