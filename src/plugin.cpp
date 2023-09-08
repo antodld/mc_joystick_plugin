@@ -124,10 +124,11 @@ void mc_joystick_plugin::before(mc_control::MCGlobalController & controller)
 
       if(event_.isButton())
       {
-
-        joystick_button_state_(static_cast<joystickButtonInputs>(event_.number)) = event_.value;
-
-        joystick_button_event_(static_cast<joystickButtonInputs>(event_.number)) = 1;
+        if(event_.number < joystickButtonInputs::N_button_inputs)
+        {
+          joystick_button_state_(static_cast<joystickButtonInputs>(event_.number)) = event_.value;
+          joystick_button_event_(static_cast<joystickButtonInputs>(event_.number)) = 1;
+        }
       }
 
       if(event_.isAxis())
