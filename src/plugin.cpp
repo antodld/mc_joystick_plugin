@@ -7,16 +7,34 @@ namespace mc_plugin
 
 mc_joystick_plugin::~mc_joystick_plugin() = default;
 
-void mc_joystick_plugin::init(mc_control::MCGlobalController & controller, const mc_rtc::Configuration & config)
+void mc_joystick_plugin::init(mc_control::MCGlobalController & controller, const mc_rtc::Configuration &)
 {
-  if(controller.controller().config().has("JoystickPlugin"))
-  {
-    configure(controller.controller().config()("JoystickPlugin"));
-  }
-  else
-  {
-    configure(config);
-  }
+  reset(controller);
+}
+
+double mc_joystick_plugin::get_inputs(joystickButtonInputs in)
+{
+  return joystick_button_state_(in);
+}
+double mc_joystick_plugin::get_events(joystickButtonInputs in)
+{
+  return joystick_button_event_(in);
+}
+double mc_joystick_plugin::get_inputs(joystickAnalogicInputs in)
+{
+
+  return joystick_analogical_state_(in, 0);
+}
+Eigen::Vector2d mc_joystick_plugin::get_stick_value(joystickAnalogicInputs in)
+{
+  return Eigen::Vector2d{joystick_analogical_state_(in, 0), joystick_analogical_state_(in, 1)};
+}
+
+void mc_joystick_plugin::reset(mc_control::MCGlobalController & controller)
+{
+  mc_rtc::log::info("mc_joystick_plugin::reset called");
+  joystickConnected_ = false;
+  joystick_.reset();
   if(!joystick_.isFound())
   {
     joystickConnected_ = false;
@@ -70,31 +88,6 @@ void mc_joystick_plugin::init(mc_control::MCGlobalController & controller, const
       "joystick_plugin_button_event", [this]() -> Eigen::VectorXd { return joystick_button_event_; },
       "joystick_plugin_analogical_state_0", [this]() -> Eigen::VectorXd { return joystick_analogical_state_.col(0); },
       "joystick_plugin_analogical_state_1", [this]() -> Eigen::VectorXd { return joystick_analogical_state_.col(1); });
-}
-
-double mc_joystick_plugin::get_inputs(joystickButtonInputs in)
-{
-  return joystick_button_state_(in);
-}
-double mc_joystick_plugin::get_events(joystickButtonInputs in)
-{
-  return joystick_button_event_(in);
-}
-double mc_joystick_plugin::get_inputs(joystickAnalogicInputs in)
-{
-
-  return joystick_analogical_state_(in, 0);
-}
-Eigen::Vector2d mc_joystick_plugin::get_stick_value(joystickAnalogicInputs in)
-{
-  return Eigen::Vector2d{joystick_analogical_state_(in, 0), joystick_analogical_state_(in, 1)};
-}
-
-void mc_joystick_plugin::reset(mc_control::MCGlobalController & controller)
-{
-  mc_rtc::log::info("mc_joystick_plugin::reset called");
-  joystickConnected_ = false;
-  joystick_.reset();
 }
 
 void mc_joystick_plugin::before(mc_control::MCGlobalController & controller)
