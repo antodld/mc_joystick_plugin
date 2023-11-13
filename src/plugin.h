@@ -25,11 +25,6 @@ struct mc_joystick_plugin : public mc_control::GlobalPlugin
 
   ~mc_joystick_plugin() override;
 
-  void configure(const mc_rtc::Configuration & config)
-  {
-    mc_rtc::log::info("[mc_joystick_plugin] configuration:\n{}", config.dump(true, true));
-  }
-
   double get_inputs(joystickButtonInputs input);
   double get_inputs(joystickAnalogicInputs input);
   double get_events(joystickButtonInputs in);
