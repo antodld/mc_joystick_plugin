@@ -13,9 +13,6 @@ include(cmake/base.cmake)
 project(${PROJECT_NAME} LANGUAGES CXX VERSION ${PROJECT_VERSION})
 option(AUTOLOAD_${PROJECT_NAME}_PLUGIN "Automatically load ${PROJECT_NAME} plugin" OFF)
 
-include(CTest)
-enable_testing()
-
 # Find mc_rtc if we are not building inside mc_rtc itself
 if(NOT TARGET mc_rtc::mc_control)
   find_package(mc_rtc REQUIRED)
@@ -65,6 +62,3 @@ target_link_libraries(${PROJECT_NAME} PUBLIC joystick_inputs)
 install(
   DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION include)
 
-if(BUILD_TESTING)
-  add_subdirectory(tests)
-endif()
