@@ -1,29 +1,37 @@
-mc_rtc new plugin template
+mc_rtc plugin for joystick controller
 ==
 
-This project is a template for a new plugin wihtin [mc_rtc]
+This project is a [mc_rtc] plugin to interract with a joystick controller, it has been tested for Xbox controllers
 
-It comes with:
-- a CMake project that can build a plugin for [mc_rtc], the project can be put within [mc_rtc] source-tree for easier updates
-- clang-format files
-- automated GitHub Actions builds on three major platforms
+## Installation 
 
-Quick start
---
+In repo directory :
+```shell
+mkdir build && cd build
+cmake ..
+make
+sudo make install
+```
+## Use
+To enable the plugin add to your [mc_rtc] configuration file :
+```shell
+Plugins: [mc_joystick_plugin]
+```
+The joystick connection status is accessible using the datastore value:
+```cpp
+bool joystick_online = ctl.datastore().get<bool>("Joystick::connected");
+```
+You can access the value of an input using the function loaded in the datastore
+```cpp
+  auto & buttonFunc = ctl.datastore().get<std::function<bool(joystickButtonInputs button)>>("Joystick::Button");
+  
+  //Button event is a boolean which is true if the state of the button change
+  auto & buttonEventFunc = ctl.datastore().get<std::function<bool(joystickButtonInputs button)>>("Joystick::ButtonEvent");
 
-1. Renaming the controller from `NewPlugin` to `MyPlugin`. In a shell (Git Bash on Windows, replace sed with gsed on macOS):
+  auto & triggerFunc = ctl.datastore().get<std::function<double(joystickAnalogicInputs)>>("Joystick::Trigger");
 
-```bash
-sed -i -e's/NewPlugin/MyPlugin/g' `find . -type f`
-git mv src/NewPlugin.cpp src/MyPlugin.cpp
-git mv src/NewPlugin.h src/MyPlugin.h
-git mv etc/NewPlugin.in.yaml etc/MyPlugin.in.yaml
+  auto & stickFunc = ctl.datastore().get<std::function<Eigen::Vector2d(joystickAnalogicInputs)>>("Joystick::Stick");
+
 ```
 
-2. You can customize the project name in vcpkg.json as well, note that this must follow [vcpkg manifest rules](https://github.com/microsoft/vcpkg/blob/master/docs/users/manifests.md)
-
-3. Build and install the project
-
-4. Run using your [mc_rtc] interface of choice, add `MyPlugin` to the `Plugins` configuration entry or enable the autoload option
-
-[mc_rtc]: https://jrl-umi3218.github.io/mc_rtc/
+You can refer to `joystick_inputs.h` to get the available buttons
