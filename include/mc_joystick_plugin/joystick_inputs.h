@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+#include <iostream>
 
 enum joystickButtonInputs
 {
@@ -16,7 +18,7 @@ R_STICK_BUTTON,
 N_button_inputs
 };
 
-joystickButtonInputs strToButtons(const std::string & input)
+inline joystickButtonInputs strToButtons(const std::string & input)
 {
     if(input == "A")
     {
@@ -66,7 +68,7 @@ joystickButtonInputs strToButtons(const std::string & input)
     return joystickButtonInputs::A;
 }
 
-std::string buttons2str(const joystickButtonInputs & input)
+inline std::string buttons2str(const joystickButtonInputs & input)
 {
     switch (input)
     {
@@ -97,7 +99,7 @@ std::string buttons2str(const joystickButtonInputs & input)
         std::cout << "[joystick str2buttons] unrecognized button inputs" << std::endl;
         break;
     }
-    
+
     return "";
 }
 
